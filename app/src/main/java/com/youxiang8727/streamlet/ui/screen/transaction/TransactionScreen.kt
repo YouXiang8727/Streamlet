@@ -90,7 +90,7 @@ fun TransactionScreen(
         OutlinedTextField(
             value = viewModel.state.amount.toString(),
             onValueChange = {
-                val amount = it.filter { c -> c.isDigit() }.toInt()
+                val amount = it.filter { c -> c.isDigit() }.toIntOrNull() ?: 0
                 viewModel.onAmountChanged(amount)
             },
             label = { Text("金額") },
