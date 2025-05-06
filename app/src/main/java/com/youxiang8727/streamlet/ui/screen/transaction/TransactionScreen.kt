@@ -1,0 +1,175 @@
+package com.youxiang8727.streamlet.ui.screen.transaction
+
+import android.app.DatePickerDialog
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.youxiang8727.streamlet.data.model.TransactionType
+import java.time.LocalDate
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TransactionScreen(
+    modifier: Modifier = Modifier
+) {
+    val viewModel: TransactionScreenViewModel = hiltViewModel()
+
+    val context = LocalContext.current
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // 類型選擇器
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            TransactionType.entries.forEach { transactionType ->
+                TypeChip(
+                    label = context.getString(transactionType.id),
+                    selected = transactionType == viewModel.state.transactionType
+                ) {
+                    viewModel.onTransactionTypeChanged(transactionType)
+                }
+            }
+        }
+
+        // 日期
+        Text(text = "紀錄日期：${viewModel.state.date}", style = MaterialTheme.typography.bodyLarge)
+        Button(onClick = {
+            DatePickerDialog(
+                context,
+                { _, year, month, day ->
+                    viewModel.onDateChanged(LocalDate.of(year, month + 1, day))
+                },
+                viewModel.state.date.year,
+                viewModel.state.date.monthValue - 1,
+                viewModel.state.date.dayOfMonth
+            ).show()
+        }) {
+            Text("選擇日期")
+        }
+
+        // 名稱
+        OutlinedTextField(
+            value = viewModel.state.title,
+            onValueChange = { title ->
+                viewModel.onTitleChanged(title)
+            },
+            label = { Text("名稱") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // 金額
+        OutlinedTextField(
+            value = viewModel.state.amount.toString(),
+            onValueChange = {
+                val amount = it.filter { c -> c.isDigit() }.toInt()
+                viewModel.onAmountChanged(amount)
+            },
+            label = { Text("金額") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // 種類選擇
+        CategoryDropdown(
+            categories = viewModel.state.categories,
+            selected = viewModel.state.category,
+            onSelected = { category ->
+                viewModel.onCategoryChanged(category)
+            }
+        )
+
+        // 說明
+        OutlinedTextField(
+            value = viewModel.state.note,
+            onValueChange = { note ->
+
+            },
+            label = {
+                Text("說明（可選）")
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 儲存按鈕
+        Button(
+            onClick = {
+
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("儲存記帳")
+        }
+    }
+}
+
+@Composable
+fun TypeChip(label: String, selected: Boolean, onClick: () -> Unit) {
+    FilterChip(
+        selected = selected,
+        onClick = onClick,
+        label = { Text(label) }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CategoryDropdown(
+    categories: List<com.youxiang8727.streamlet.data.model.Category>,
+    selected: com.youxiang8727.streamlet.data.model.Category?,
+    onSelected: (com.youxiang8727.streamlet.data.model.Category) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
+        OutlinedTextField(
+            value = selected?.name ?: "",
+            onValueChange = {},
+            readOnly = true,
+            label = { Text("種類") },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable).fillMaxWidth()
+        )
+        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            categories.forEach { cat ->
+                DropdownMenuItem(
+                    text = { Text(cat.name) },
+                    onClick = {
+                        onSelected(cat)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}

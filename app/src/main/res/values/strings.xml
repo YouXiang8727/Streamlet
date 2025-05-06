@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Streamlet</string>
+    <string name="app_subtitle">Your Money Diary</string>
+    <string name="transaction_type_expense">Expanse</string>
+    <string name="transaction_type_income">Income</string>
+    <string name="category_expense_food">Food</string>
+    <string name="category_expense_transport">Transport</string>
+    <string name="category_expense_entertainment">Entertainment</string>
+    <string name="category_expense_utilities">Utilities</string>
+    <string name="category_expense_shopping">Shopping</string>
+    <string name="category_expense_education">Education</string>
+    <string name="category_expense_communication">Communication</string>
+    <string name="category_expense_other">Other</string>
+    <string name="category_income_salary">Salary</string>
+    <string name="category_income_bonus">Bonus</string>
+    <string name="category_income_investment">Investment</string>
+    <string name="category_income_other">Other</string>
+</resources>

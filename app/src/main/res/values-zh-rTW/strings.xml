@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">細流</string>
+    <string name="app_subtitle">你的理財日記</string>
+    <string name="transaction_type_expense">支出</string>
+    <string name="transaction_type_income">收入</string>
+    <string name="category_expense_food">食物</string>
+    <string name="category_expense_transport">交通</string>
+    <string name="category_expense_entertainment">娛樂</string>
+    <string name="category_expense_utilities">水電瓦斯</string>
+    <string name="category_expense_shopping">購物</string>
+    <string name="category_expense_education">教育</string>
+    <string name="category_expense_communication">手機網路</string>
+    <string name="category_expense_other">其他支出</string>
+    <string name="category_income_salary">薪資</string>
+    <string name="category_income_bonus">獎金</string>
+    <string name="category_income_investment">投資</string>
+    <string name="category_income_other">其他收入</string>
+</resources>

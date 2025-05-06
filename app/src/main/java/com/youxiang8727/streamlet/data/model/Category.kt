@@ -1,0 +1,18 @@
+package com.youxiang8727.streamlet.data.model
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
+
+@Serializable
+@Entity(tableName = "category")
+data class Category(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    val id: Int = 0,
+    @ColumnInfo(name = "name")
+    val name: String,
+    @ColumnInfo(name = "transaction_type")
+    val transactionType: TransactionType
+)
