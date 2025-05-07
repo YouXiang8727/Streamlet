@@ -16,4 +16,11 @@
     <string name="category_income_bonus">獎金</string>
     <string name="category_income_investment">投資</string>
     <string name="category_income_other">其他收入</string>
+    <string name="record_date">紀錄日期</string>
+    <string name="select_date">選擇日期</string>
+    <string name="title">標題</string>
+    <string name="amount">金額</string>
+    <string name="note_optional">註記(選填)</string>
+    <string name="save">保存</string>
+    <string name="category">分類</string>
 </resources>

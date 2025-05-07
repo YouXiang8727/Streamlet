@@ -14,5 +14,13 @@ data class TransactionUiState(
     val categories: List<Category> = emptyList(),
     val category: Category? = null
 ): UiState {
+    val maxTitleLength = 10
+    val titleSupportText = "${title.length}/$maxTitleLength"
 
+    val maxAmount: Int = 99999999
+
+    val maxNoteLength = 50
+    val noteSupportText = "${note.length}/$maxNoteLength"
+
+    val saveable = title.isNotBlank() && amount > 0
 }

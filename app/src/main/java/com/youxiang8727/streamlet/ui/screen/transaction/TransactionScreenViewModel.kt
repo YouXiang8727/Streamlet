@@ -34,11 +34,18 @@ class TransactionScreenViewModel @Inject constructor(
     }
 
     fun onTitleChanged(title: String) {
+        if (title.length > state.maxTitleLength) return
         dispatch(TransactionUiEvent.OnTitleChanged(title))
     }
 
     fun onAmountChanged(amount: Int) {
+        if (amount > state.maxAmount) return
         dispatch(TransactionUiEvent.OnAmountChanged(amount))
+    }
+
+    fun onNoteChanged(note: String) {
+        if (note.length > state.maxNoteLength) return
+        dispatch(TransactionUiEvent.OnNoteChanged(note))
     }
 
     init {
@@ -72,6 +79,11 @@ class TransactionScreenViewModel @Inject constructor(
             is TransactionUiEvent.OnTitleChanged -> {
                 state.copy(
                     title = event.title
+                )
+            }
+            is TransactionUiEvent.OnNoteChanged -> {
+                state.copy(
+                    note = event.note
                 )
             }
         }

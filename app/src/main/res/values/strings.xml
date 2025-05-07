@@ -15,4 +15,11 @@
     <string name="category_income_bonus">Bonus</string>
     <string name="category_income_investment">Investment</string>
     <string name="category_income_other">Other</string>
+    <string name="record_date">Record Date</string>
+    <string name="select_date">Select Date</string>
+    <string name="title">Title</string>
+    <string name="amount">Amount</string>
+    <string name="note_optional">Note(Optional)</string>
+    <string name="save">Save</string>
+    <string name="category">Category</string>
 </resources>

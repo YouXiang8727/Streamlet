@@ -15,4 +15,6 @@ sealed interface TransactionUiEvent: UiEvent {
     data class OnTitleChanged(val title: String): TransactionUiEvent
 
     data class OnAmountChanged(val amount: Int): TransactionUiEvent
+
+    data class OnNoteChanged(val note: String): TransactionUiEvent
 }

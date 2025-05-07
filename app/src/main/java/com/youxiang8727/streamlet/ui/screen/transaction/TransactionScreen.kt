@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.youxiang8727.streamlet.data.model.TransactionType
 import java.time.LocalDate
+import com.youxiang8727.streamlet.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,7 +62,7 @@ fun TransactionScreen(
         }
 
         // 日期
-        Text(text = "紀錄日期：${viewModel.state.date}", style = MaterialTheme.typography.bodyLarge)
+        Text(text = "${context.getString(R.string.record_date)}：${viewModel.state.date}", style = MaterialTheme.typography.bodyLarge)
         Button(onClick = {
             DatePickerDialog(
                 context,
@@ -73,7 +74,7 @@ fun TransactionScreen(
                 viewModel.state.date.dayOfMonth
             ).show()
         }) {
-            Text("選擇日期")
+            Text(context.getString(R.string.select_date))
         }
 
         // 名稱
@@ -82,7 +83,12 @@ fun TransactionScreen(
             onValueChange = { title ->
                 viewModel.onTitleChanged(title)
             },
-            label = { Text("名稱") },
+            label = {
+                Text(context.getString(R.string.title))
+            },
+            supportingText = {
+                Text(viewModel.state.titleSupportText)
+            },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -93,7 +99,7 @@ fun TransactionScreen(
                 val amount = it.filter { c -> c.isDigit() }.toIntOrNull() ?: 0
                 viewModel.onAmountChanged(amount)
             },
-            label = { Text("金額") },
+            label = { Text(context.getString(R.string.amount)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
@@ -111,10 +117,13 @@ fun TransactionScreen(
         OutlinedTextField(
             value = viewModel.state.note,
             onValueChange = { note ->
-
+                viewModel.onNoteChanged(note)
             },
             label = {
-                Text("說明（可選）")
+                Text(context.getString(R.string.note_optional))
+            },
+            supportingText = {
+                Text(viewModel.state.noteSupportText)
             },
             modifier = Modifier.fillMaxWidth()
         )
@@ -126,9 +135,10 @@ fun TransactionScreen(
             onClick = {
 
             },
+            enabled = viewModel.state.saveable,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("儲存記帳")
+            Text(context.getString(R.string.save))
         }
     }
 }
@@ -149,6 +159,8 @@ fun CategoryDropdown(
     selected: com.youxiang8727.streamlet.data.model.Category?,
     onSelected: (com.youxiang8727.streamlet.data.model.Category) -> Unit
 ) {
+    val context = LocalContext.current
+
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
@@ -156,7 +168,7 @@ fun CategoryDropdown(
             value = selected?.name ?: "",
             onValueChange = {},
             readOnly = true,
-            label = { Text("種類") },
+            label = { Text(context.getString(R.string.category)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable).fillMaxWidth()
         )
