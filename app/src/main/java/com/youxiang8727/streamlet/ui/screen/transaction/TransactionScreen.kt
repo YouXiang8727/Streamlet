@@ -33,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.youxiang8727.streamlet.data.model.TransactionType
 import java.time.LocalDate
 import com.youxiang8727.streamlet.R
+import com.youxiang8727.streamlet.domain.model.Category
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,7 +108,7 @@ fun TransactionScreen(
         // 種類選擇
         CategoryDropdown(
             categories = viewModel.state.categories,
-            selected = viewModel.state.category,
+            selected = viewModel.state.categoryEntity,
             onSelected = { category ->
                 viewModel.onCategoryChanged(category)
             }
@@ -155,9 +156,9 @@ fun TypeChip(label: String, selected: Boolean, onClick: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryDropdown(
-    categories: List<com.youxiang8727.streamlet.data.model.Category>,
-    selected: com.youxiang8727.streamlet.data.model.Category?,
-    onSelected: (com.youxiang8727.streamlet.data.model.Category) -> Unit
+    categories: List<Category>,
+    selected: Category?,
+    onSelected: (Category) -> Unit
 ) {
     val context = LocalContext.current
 

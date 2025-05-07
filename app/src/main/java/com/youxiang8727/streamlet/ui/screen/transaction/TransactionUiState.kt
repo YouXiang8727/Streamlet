@@ -1,7 +1,7 @@
 package com.youxiang8727.streamlet.ui.screen.transaction
 
-import com.youxiang8727.streamlet.data.model.Category
 import com.youxiang8727.streamlet.data.model.TransactionType
+import com.youxiang8727.streamlet.domain.model.Category
 import com.youxiang8727.streamlet.mvi.UiState
 import java.time.LocalDate
 
@@ -12,7 +12,7 @@ data class TransactionUiState(
     val amount: Int = 0,
     val note: String = "",
     val categories: List<Category> = emptyList(),
-    val category: Category? = null
+    val categoryEntity: Category? = null
 ): UiState {
     val maxTitleLength = 10
     val titleSupportText = "${title.length}/$maxTitleLength"

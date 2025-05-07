@@ -19,7 +19,7 @@ data class TransactionDataEntity(
     @ColumnInfo(name = "name")
     val name: String,
     @ColumnInfo(name = "category")
-    val category: Category,
+    val categoryEntity: CategoryEntity,
     @ColumnInfo(name = "detail")
     val detail: String = "",
 )

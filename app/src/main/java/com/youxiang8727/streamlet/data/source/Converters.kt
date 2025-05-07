@@ -1,7 +1,7 @@
 package com.youxiang8727.streamlet.data.source
 
 import androidx.room.TypeConverter
-import com.youxiang8727.streamlet.data.model.Category
+import com.youxiang8727.streamlet.data.model.CategoryEntity
 import com.youxiang8727.streamlet.data.model.TransactionType
 import kotlinx.serialization.json.Json
 import java.time.LocalDate
@@ -14,10 +14,10 @@ class Converters {
     fun toTransactionType(value: String): TransactionType = Json.decodeFromString(value)
 
     @TypeConverter
-    fun fromCategory(category: Category): String = Json.encodeToString(category)
+    fun fromCategory(categoryEntity: CategoryEntity): String = Json.encodeToString(categoryEntity)
 
     @TypeConverter
-    fun toCategory(value: String): Category = Json.decodeFromString(value)
+    fun toCategory(value: String): CategoryEntity = Json.decodeFromString(value)
 
     @TypeConverter
     fun fromDate(date: LocalDate): String = date.toString()

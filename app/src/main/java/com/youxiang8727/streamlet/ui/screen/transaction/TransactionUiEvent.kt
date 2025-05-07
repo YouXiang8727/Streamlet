@@ -1,7 +1,7 @@
 package com.youxiang8727.streamlet.ui.screen.transaction
 
-import com.youxiang8727.streamlet.data.model.Category
 import com.youxiang8727.streamlet.data.model.TransactionType
+import com.youxiang8727.streamlet.domain.model.Category
 import com.youxiang8727.streamlet.mvi.UiEvent
 import java.time.LocalDate
 

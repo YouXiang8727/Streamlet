@@ -1,24 +1,32 @@
 package com.youxiang8727.streamlet.ui.screen.transaction
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
-import com.youxiang8727.streamlet.data.model.Category
 import com.youxiang8727.streamlet.data.model.TransactionType
+import com.youxiang8727.streamlet.data.model.toCategory
+import com.youxiang8727.streamlet.domain.model.Category
 import com.youxiang8727.streamlet.domain.usecase.GetCategoriesUseCase
 import com.youxiang8727.streamlet.mvi.MviViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class TransactionScreenViewModel @Inject constructor(
-    private val getCategoriesUseCase: GetCategoriesUseCase
+    private val getCategoriesUseCase: GetCategoriesUseCase,
+    @ApplicationContext
+    private val context: Context
 ): MviViewModel<TransactionUiState, TransactionUiEvent>(
     initialState = TransactionUiState()
 ) {
     fun onTransactionTypeChanged(transactionType: TransactionType) {
         viewModelScope.launch {
             val categories = getCategoriesUseCase(transactionType)
+                .map {
+                    it.toCategory(context)
+                }
             dispatch(
                 TransactionUiEvent.OnTransactionTypeChanged(transactionType, categories)
             )
@@ -58,12 +66,12 @@ class TransactionScreenViewModel @Inject constructor(
                 state.copy(
                     transactionType = event.transactionType,
                     categories = event.categories,
-                    category = event.categories.firstOrNull()
+                    categoryEntity = event.categories.firstOrNull()
                 )
             }
             is TransactionUiEvent.OnCategoryChanged -> {
                 state.copy(
-                    category = event.category
+                    categoryEntity = event.category
                 )
             }
             is TransactionUiEvent.OnAmountChanged -> {
