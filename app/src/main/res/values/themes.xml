@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="Theme.Streamlet" parent="android:Theme.Material.Light.NoActionBar" />
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.Streamlet" parent="android:Theme.Material.Light.NoActionBar" >
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- Set a transparent .png as your icon -->
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@android:color/transparent</item>
+    </style>
 </resources>
