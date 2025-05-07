@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.youxiang8727.streamlet.domain.usecase.InitCategoriesUseCase
-import com.youxiang8727.streamlet.ui.screen.transaction.TransactionScreen
+import com.youxiang8727.streamlet.ui.navigation.AppNavigation
 import com.youxiang8727.streamlet.ui.theme.StreamletTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             StreamletTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    TransactionScreen(
+                    AppNavigation(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }

@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import kotlinx.coroutines.delay
 import com.youxiang8727.streamlet.R
+import kotlinx.coroutines.launch
 
 @Composable
 @Preview(
@@ -27,13 +28,17 @@ fun SplashScreen(
     val context = LocalContext.current
 
     val alphaAnim = remember { Animatable(0f) }
-    val offsetY = remember { Animatable(20f) }
+    val offsetY = remember { Animatable(100f) }
 
     LaunchedEffect(Unit) {
-        alphaAnim.animateTo(1f, animationSpec = tween(1000))
-        offsetY.animateTo(0f, animationSpec = tween(1000))
-        delay(1500)
-        onFinish()
+        launch {
+            alphaAnim.animateTo(1f, animationSpec = tween(1000))
+        }
+        launch {
+            offsetY.animateTo(0f, animationSpec = tween(500))
+            offsetY.animateTo(100f, animationSpec = tween(500))
+            onFinish()
+        }
     }
 
     Box(
