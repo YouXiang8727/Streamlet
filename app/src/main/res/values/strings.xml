@@ -22,4 +22,6 @@
     <string name="note_optional">Note(Optional)</string>
     <string name="save">Save</string>
     <string name="category">Category</string>
+    <string name="transaction_saved_successfully">Transaction saved successfully</string>
+    <string name="transaction_saved_failed">Transaction saved failed(%1%s)</string>
 </resources>

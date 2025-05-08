@@ -1,18 +1,26 @@
 package com.youxiang8727.streamlet.ui.screen.transaction
 
+import android.annotation.SuppressLint
+import android.content.Context
 import androidx.lifecycle.viewModelScope
+import com.youxiang8727.streamlet.R
 import com.youxiang8727.streamlet.data.model.TransactionType
 import com.youxiang8727.streamlet.domain.model.Category
+import com.youxiang8727.streamlet.domain.model.TransactionData
 import com.youxiang8727.streamlet.domain.usecase.GetCategoriesUseCase
+import com.youxiang8727.streamlet.domain.usecase.SaveTransactionDataUseCase
 import com.youxiang8727.streamlet.mvi.MviViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class TransactionScreenViewModel @Inject constructor(
-    private val getCategoriesUseCase: GetCategoriesUseCase
+    @ApplicationContext private val context: Context,
+    private val getCategoriesUseCase: GetCategoriesUseCase,
+    private val saveTransactionDataUseCase: SaveTransactionDataUseCase
 ): MviViewModel<TransactionUiState, TransactionUiEvent>(
     initialState = TransactionUiState()
 ) {
@@ -48,6 +56,38 @@ class TransactionScreenViewModel @Inject constructor(
         dispatch(TransactionUiEvent.OnNoteChanged(note))
     }
 
+    @SuppressLint("StringFormatMatches")
+    fun save() {
+        viewModelScope.launch {
+            val transactionData = TransactionData(
+                transactionType = state.transactionType,
+                category = state.categoryEntity!!,
+                date = state.date,
+                title = state.title,
+                amount = state.amount,
+                note = state.note
+            )
+
+            try {
+                saveTransactionDataUseCase(transactionData)
+                dispatch(
+                    TransactionUiEvent.OnSaveResult(
+                        context.getString(R.string.transaction_saved_successfully)
+                    )
+                )
+            }catch (e: Exception) {
+                dispatch(
+                    TransactionUiEvent.OnSaveResult(
+                        context.getString(
+                            R.string.transaction_saved_failed,
+                            e.toString()
+                        )
+                    )
+                )
+            }
+        }
+    }
+
     init {
         onTransactionTypeChanged(TransactionType.EXPENSE)
     }
@@ -78,12 +118,21 @@ class TransactionScreenViewModel @Inject constructor(
             }
             is TransactionUiEvent.OnTitleChanged -> {
                 state.copy(
-                    title = event.title
+                    title = event.title,
+                    message = null
                 )
             }
             is TransactionUiEvent.OnNoteChanged -> {
                 state.copy(
                     note = event.note
+                )
+            }
+            is TransactionUiEvent.OnSaveResult -> {
+                state.copy(
+                    title = "",
+                    amount = 0,
+                    note = "",
+                    message = event.message
                 )
             }
         }

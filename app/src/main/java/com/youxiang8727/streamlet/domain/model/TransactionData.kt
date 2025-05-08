@@ -8,15 +8,16 @@ data class TransactionData(
     val date: LocalDate,
     val transactionType: TransactionType,
     val title: String,
-    val price: Int,
+    val amount: Int,
     val category: Category,
-    val detail: String
+    val note: String
 )
 
 fun TransactionData.toEntity(): TransactionDataEntity = TransactionDataEntity(
     date = date,
     transactionType = transactionType,
     title = title,
-    price = price,
+    amount = amount,
     categoryEntity = category.toEntity(),
+    note = note
 )

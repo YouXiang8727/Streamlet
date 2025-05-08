@@ -7,6 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.youxiang8727.streamlet.domain.usecase.InitCategoriesUseCase
 import com.youxiang8727.streamlet.ui.navigation.AppNavigation
@@ -30,9 +34,24 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             StreamletTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                val snackBarHostState = remember {
+                    SnackbarHostState()
+                }
+
+                val snackBarScope = rememberCoroutineScope()
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    snackbarHost = {
+                        SnackbarHost(
+                            hostState = snackBarHostState
+                        )
+                    }
+                ) { innerPadding ->
                     AppNavigation(
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                        snackBarHostState = snackBarHostState,
+                        snackBarScope = snackBarScope
                     )
                 }
             }

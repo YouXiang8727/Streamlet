@@ -2,10 +2,11 @@ package com.youxiang8727.streamlet.ui.navigation
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -14,18 +15,33 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.youxiang8727.streamlet.ui.screen.splash.SplashScreen
 import com.youxiang8727.streamlet.ui.screen.transaction.TransactionScreen
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable
 
 val LocalNavigationController = staticCompositionLocalOf<NavHostController> {
     error("No navigation controller provided")
 }
 
+val LocalSnackBarHostState = compositionLocalOf<SnackbarHostState> {
+    error("No snack bar host state provided")
+}
+
+val LocalSnackBarScope = staticCompositionLocalOf<CoroutineScope> {
+    error("No snack bar scope provided")
+}
+
 @Composable
 fun AppNavigation(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    snackBarHostState: SnackbarHostState,
+    snackBarScope: CoroutineScope
 ) {
     val navHostController = rememberNavController()
-    CompositionLocalProvider(LocalNavigationController provides navHostController) {
+    CompositionLocalProvider(
+        LocalNavigationController provides navHostController,
+        LocalSnackBarHostState provides snackBarHostState,
+        LocalSnackBarScope provides snackBarScope
+    ) {
         NavHost(
             navController = navHostController,
             startDestination = SplashScreenDestination

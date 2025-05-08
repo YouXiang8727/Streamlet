@@ -23,4 +23,6 @@
     <string name="note_optional">註記(選填)</string>
     <string name="save">保存</string>
     <string name="category">分類</string>
+    <string name="transaction_saved_successfully">儲存成功</string>
+    <string name="transaction_saved_failed">儲存失敗(%1%s)</string>
 </resources>

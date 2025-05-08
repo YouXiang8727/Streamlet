@@ -12,7 +12,8 @@ data class TransactionUiState(
     val amount: Int = 0,
     val note: String = "",
     val categories: List<Category> = emptyList(),
-    val categoryEntity: Category? = null
+    val categoryEntity: Category? = null,
+    val message: String? = null
 ): UiState {
     val maxTitleLength = 10
     val titleSupportText = "${title.length}/$maxTitleLength"

@@ -21,6 +21,7 @@ import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +35,9 @@ import com.youxiang8727.streamlet.data.model.TransactionType
 import java.time.LocalDate
 import com.youxiang8727.streamlet.R
 import com.youxiang8727.streamlet.domain.model.Category
+import com.youxiang8727.streamlet.ui.navigation.LocalSnackBarHostState
+import com.youxiang8727.streamlet.ui.navigation.LocalSnackBarScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,6 +47,17 @@ fun TransactionScreen(
     val viewModel: TransactionScreenViewModel = hiltViewModel()
 
     val context = LocalContext.current
+
+    val localSnackBarScope = LocalSnackBarScope.current
+    val localSnackBarHostState = LocalSnackBarHostState.current
+
+    LaunchedEffect(viewModel.state.message) {
+        viewModel.state.message?.let {
+            localSnackBarScope.launch {
+                localSnackBarHostState.showSnackbar(message = it)
+            }
+        }
+    }
 
     Column(
         modifier = modifier
@@ -134,7 +149,7 @@ fun TransactionScreen(
         // 儲存按鈕
         Button(
             onClick = {
-
+                viewModel.save()
             },
             enabled = viewModel.state.saveable,
             modifier = Modifier.fillMaxWidth()
