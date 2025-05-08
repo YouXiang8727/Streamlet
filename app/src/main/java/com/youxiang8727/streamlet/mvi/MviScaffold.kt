@@ -1,12 +1,11 @@
 package com.youxiang8727.streamlet.mvi
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 interface UiState
@@ -18,8 +17,11 @@ private const val BUFFER_SIZE = 64
 abstract class MviViewModel<S: UiState, E: UiEvent>(
     initialState: S
 ): ViewModel() {
-    var state: S by mutableStateOf(initialState)
-        private set
+    private val _uiStateFlow: MutableStateFlow<S> = MutableStateFlow(initialState)
+    val uiStateFlow: StateFlow<S> = _uiStateFlow.asStateFlow()
+
+//    var state: S by mutableStateOf(initialState)
+//        private set
 
     private var event: MutableSharedFlow<E> = MutableSharedFlow(
         extraBufferCapacity = BUFFER_SIZE
@@ -36,7 +38,8 @@ abstract class MviViewModel<S: UiState, E: UiEvent>(
     init {
         viewModelScope.launch {
             event.collect {
-                state = reduce(it)
+//                state = reduce(it)
+                _uiStateFlow.value = reduce(it)
             }
         }
     }

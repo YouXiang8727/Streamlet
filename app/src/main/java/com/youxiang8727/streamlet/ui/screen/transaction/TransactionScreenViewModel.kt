@@ -42,17 +42,17 @@ class TransactionScreenViewModel @Inject constructor(
     }
 
     fun onTitleChanged(title: String) {
-        if (title.length > state.maxTitleLength) return
+        if (title.length > uiStateFlow.value.maxTitleLength) return
         dispatch(TransactionUiEvent.OnTitleChanged(title))
     }
 
     fun onAmountChanged(amount: Int) {
-        if (amount > state.maxAmount) return
+        if (amount > uiStateFlow.value.maxAmount) return
         dispatch(TransactionUiEvent.OnAmountChanged(amount))
     }
 
     fun onNoteChanged(note: String) {
-        if (note.length > state.maxNoteLength) return
+        if (note.length > uiStateFlow.value.maxNoteLength) return
         dispatch(TransactionUiEvent.OnNoteChanged(note))
     }
 
@@ -60,12 +60,12 @@ class TransactionScreenViewModel @Inject constructor(
     fun save() {
         viewModelScope.launch {
             val transactionData = TransactionData(
-                transactionType = state.transactionType,
-                category = state.categoryEntity!!,
-                date = state.date,
-                title = state.title,
-                amount = state.amount,
-                note = state.note
+                transactionType = uiStateFlow.value.transactionType,
+                category = uiStateFlow.value.categoryEntity!!,
+                date = uiStateFlow.value.date,
+                title = uiStateFlow.value.title,
+                amount = uiStateFlow.value.amount,
+                note = uiStateFlow.value.note
             )
 
             try {
@@ -95,40 +95,40 @@ class TransactionScreenViewModel @Inject constructor(
     override fun reduce(event: TransactionUiEvent): TransactionUiState {
         return when (event) {
             is TransactionUiEvent.OnTransactionTypeChanged -> {
-                state.copy(
+                uiStateFlow.value.copy(
                     transactionType = event.transactionType,
                     categories = event.categories,
                     categoryEntity = event.categories.firstOrNull()
                 )
             }
             is TransactionUiEvent.OnCategoryChanged -> {
-                state.copy(
+                uiStateFlow.value.copy(
                     categoryEntity = event.category
                 )
             }
             is TransactionUiEvent.OnAmountChanged -> {
-                state.copy(
+                uiStateFlow.value.copy(
                     amount = event.amount
                 )
             }
             is TransactionUiEvent.OnDateChanged -> {
-                state.copy(
+                uiStateFlow.value.copy(
                     date = event.date
                 )
             }
             is TransactionUiEvent.OnTitleChanged -> {
-                state.copy(
+                uiStateFlow.value.copy(
                     title = event.title,
                     message = null
                 )
             }
             is TransactionUiEvent.OnNoteChanged -> {
-                state.copy(
+                uiStateFlow.value.copy(
                     note = event.note
                 )
             }
             is TransactionUiEvent.OnSaveResult -> {
-                state.copy(
+                uiStateFlow.value.copy(
                     title = "",
                     amount = 0,
                     note = "",

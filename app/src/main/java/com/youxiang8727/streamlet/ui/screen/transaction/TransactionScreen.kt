@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.youxiang8727.streamlet.data.model.TransactionType
 import java.time.LocalDate
 import com.youxiang8727.streamlet.R
@@ -45,14 +46,15 @@ fun TransactionScreen(
     modifier: Modifier = Modifier
 ) {
     val viewModel: TransactionScreenViewModel = hiltViewModel()
+    val state = viewModel.uiStateFlow.collectAsStateWithLifecycle().value
 
     val context = LocalContext.current
 
     val localSnackBarScope = LocalSnackBarScope.current
     val localSnackBarHostState = LocalSnackBarHostState.current
 
-    LaunchedEffect(viewModel.state.message) {
-        viewModel.state.message?.let {
+    LaunchedEffect(state.message) {
+        state.message?.let {
             localSnackBarScope.launch {
                 localSnackBarHostState.showSnackbar(message = it)
             }
@@ -70,7 +72,7 @@ fun TransactionScreen(
             TransactionType.entries.forEach { transactionType ->
                 TypeChip(
                     label = context.getString(transactionType.id),
-                    selected = transactionType == viewModel.state.transactionType
+                    selected = transactionType == state.transactionType
                 ) {
                     viewModel.onTransactionTypeChanged(transactionType)
                 }
@@ -78,16 +80,16 @@ fun TransactionScreen(
         }
 
         // 日期
-        Text(text = "${context.getString(R.string.record_date)}：${viewModel.state.date}", style = MaterialTheme.typography.bodyLarge)
+        Text(text = "${context.getString(R.string.record_date)}：${state.date}", style = MaterialTheme.typography.bodyLarge)
         Button(onClick = {
             DatePickerDialog(
                 context,
                 { _, year, month, day ->
                     viewModel.onDateChanged(LocalDate.of(year, month + 1, day))
                 },
-                viewModel.state.date.year,
-                viewModel.state.date.monthValue - 1,
-                viewModel.state.date.dayOfMonth
+                state.date.year,
+                state.date.monthValue - 1,
+                state.date.dayOfMonth
             ).show()
         }) {
             Text(context.getString(R.string.select_date))
@@ -95,7 +97,7 @@ fun TransactionScreen(
 
         // 名稱
         OutlinedTextField(
-            value = viewModel.state.title,
+            value = state.title,
             onValueChange = { title ->
                 viewModel.onTitleChanged(title)
             },
@@ -103,14 +105,14 @@ fun TransactionScreen(
                 Text(context.getString(R.string.title))
             },
             supportingText = {
-                Text(viewModel.state.titleSupportText)
+                Text(state.titleSupportText)
             },
             modifier = Modifier.fillMaxWidth()
         )
 
         // 金額
         OutlinedTextField(
-            value = viewModel.state.amount.toString(),
+            value = state.amount.toString(),
             onValueChange = {
                 val amount = it.filter { c -> c.isDigit() }.toIntOrNull() ?: 0
                 viewModel.onAmountChanged(amount)
@@ -122,8 +124,8 @@ fun TransactionScreen(
 
         // 種類選擇
         CategoryDropdown(
-            categories = viewModel.state.categories,
-            selected = viewModel.state.categoryEntity,
+            categories = state.categories,
+            selected = state.categoryEntity,
             onSelected = { category ->
                 viewModel.onCategoryChanged(category)
             }
@@ -131,7 +133,7 @@ fun TransactionScreen(
 
         // 說明
         OutlinedTextField(
-            value = viewModel.state.note,
+            value = state.note,
             onValueChange = { note ->
                 viewModel.onNoteChanged(note)
             },
@@ -139,7 +141,7 @@ fun TransactionScreen(
                 Text(context.getString(R.string.note_optional))
             },
             supportingText = {
-                Text(viewModel.state.noteSupportText)
+                Text(state.noteSupportText)
             },
             modifier = Modifier.fillMaxWidth()
         )
@@ -151,7 +153,7 @@ fun TransactionScreen(
             onClick = {
                 viewModel.save()
             },
-            enabled = viewModel.state.saveable,
+            enabled = state.saveable,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(context.getString(R.string.save))
