@@ -1,8 +1,10 @@
 package com.youxiang8727.streamlet.data.model
 
+import android.content.Context
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.youxiang8727.streamlet.domain.model.TransactionData
 import java.time.LocalDate
 
 @Entity(tableName = "transactionData")
@@ -16,10 +18,19 @@ data class TransactionDataEntity(
     val transactionType: TransactionType,
     @ColumnInfo(name = "price")
     val price: Int,
-    @ColumnInfo(name = "name")
-    val name: String,
+    @ColumnInfo(name = "title")
+    val title: String,
     @ColumnInfo(name = "category")
     val categoryEntity: CategoryEntity,
     @ColumnInfo(name = "detail")
     val detail: String = "",
+)
+
+fun TransactionDataEntity.toTransactionData(context: Context): TransactionData = TransactionData(
+    date = date,
+    transactionType = transactionType,
+    price = price,
+    title = title,
+    category = categoryEntity.toCategory(context),
+    detail = detail
 )

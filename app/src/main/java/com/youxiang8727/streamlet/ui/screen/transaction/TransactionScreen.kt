@@ -166,7 +166,7 @@ fun CategoryDropdown(
 
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
         OutlinedTextField(
-            value = selected?.name ?: "",
+            value = selected?.title ?: "",
             onValueChange = {},
             readOnly = true,
             label = { Text(context.getString(R.string.category)) },
@@ -176,7 +176,7 @@ fun CategoryDropdown(
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             categories.forEach { cat ->
                 DropdownMenuItem(
-                    text = { Text(cat.name) },
+                    text = { Text(cat.title) },
                     onClick = {
                         onSelected(cat)
                         expanded = false

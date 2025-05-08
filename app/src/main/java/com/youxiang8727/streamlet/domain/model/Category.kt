@@ -4,11 +4,11 @@ import com.youxiang8727.streamlet.data.model.CategoryEntity
 import com.youxiang8727.streamlet.data.model.TransactionType
 
 data class Category(
-    val name: String,
+    val title: String,
     val transactionType: TransactionType
 )
 
-fun Category.toCategoryEntity(): CategoryEntity = CategoryEntity(
-    name = name,
+fun Category.toEntity(): CategoryEntity = CategoryEntity(
+    title = title,
     transactionType = transactionType
 )

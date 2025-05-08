@@ -15,13 +15,13 @@ data class CategoryEntity(
     val id: Int = 0,
     @ColumnInfo(name = "resource_id")
     val resourceId: Int? = null,
-    @ColumnInfo(name = "name")
-    val name: String? = null,
+    @ColumnInfo(name = "title")
+    val title: String? = null,
     @ColumnInfo(name = "transaction_type")
     val transactionType: TransactionType
 )
 
 fun CategoryEntity.toCategory(context: Context): Category = Category(
-    name = if (resourceId == null) name ?: "" else context.getString(resourceId),
+    title = if (resourceId == null) title ?: "" else context.getString(resourceId),
     transactionType = transactionType
 )
