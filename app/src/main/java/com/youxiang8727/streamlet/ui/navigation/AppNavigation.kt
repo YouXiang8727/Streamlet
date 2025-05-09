@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.youxiang8727.streamlet.ui.screen.home.HomeScreen
 import com.youxiang8727.streamlet.ui.screen.splash.SplashScreen
 import com.youxiang8727.streamlet.ui.screen.transaction.TransactionScreen
 import kotlinx.coroutines.CoroutineScope
@@ -57,12 +58,16 @@ fun AppNavigation(
                 }
             ) {
                 SplashScreen(modifier) {
-                    navHostController.navigate(TransactionScreenDestination) {
+                    navHostController.navigate(HomeScreenDestination) {
                         popUpTo(0) {
                             inclusive = true
                         }
                     }
                 }
+            }
+
+            composable<HomeScreenDestination> {
+                HomeScreen(modifier)
             }
 
             composable<TransactionScreenDestination> {
@@ -77,3 +82,6 @@ data object SplashScreenDestination
 
 @Serializable
 data object TransactionScreenDestination
+
+@Serializable
+data object HomeScreenDestination
