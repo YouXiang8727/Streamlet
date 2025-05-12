@@ -36,10 +36,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.youxiang8727.streamlet.R
 import com.youxiang8727.streamlet.domain.model.TransactionData
 import com.youxiang8727.streamlet.ui.components.chart.piechart.PieChart
-import com.youxiang8727.streamlet.ui.components.chart.piechart.PieChartData
 import com.youxiang8727.streamlet.ui.components.customcalendar.CustomCalendar
+import com.youxiang8727.streamlet.ui.screen.transaction.TypeChip
 import java.time.LocalDate
 
 @Composable
@@ -78,7 +79,7 @@ fun HomeScreen(
                 .padding(contentPadding)
         ) {
             CustomCalendar(
-                modifier = modifier,
+                modifier = Modifier,
                 localDate = state.date,
                 expandCallback = {
                     calendarExpanded = it
@@ -91,24 +92,15 @@ fun HomeScreen(
             if (calendarExpanded) {
                 Spacer(modifier = Modifier.weight(1f))
             } else {
-                PieChart(
-                    modifier = modifier
+                PieChartLayout(
+                    modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f),
-                    data = state.transactionData.groupBy {
-                        it.category
-                    }.map {
-                        PieChartData(
-                            label = it.key.title,
-                            data = it.value.sumOf { it.amount },
-                            color = it.key.color
-                        )
-                    }
+                        .weight(1f)
                 )
             }
 
             TransactionDataList(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1.2f)
             )
@@ -186,6 +178,56 @@ private fun TransactionDataListItem(
             text = transactionData.amount.toString(),
             textAlign = TextAlign.End,
             modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@Composable
+private fun PieChartLayout(
+    modifier: Modifier = Modifier
+) {
+    val viewModel: HomeScreenViewModel = hiltViewModel()
+    val state = viewModel.uiStateFlow.collectAsStateWithLifecycle().value
+
+    if (state.pieChartDataType == null) return
+
+    val context = LocalContext.current
+
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            PieChartDataType.defaults.forEach {
+                TypeChip(
+                    label = context.getString(it.stringResourceId),
+                    selected = it == state.pieChartDataType
+                ) {
+                    viewModel.onPieChartDataTypeChanged(it)
+                }
+            }
+        }
+
+        val data = state.getPieChartData(context)
+
+        if (data.isEmpty()) {
+            Box(
+                modifier = modifier,
+                contentAlignment = Alignment.Center
+            ) {
+                Text(context.getString(R.string.no_data))
+            }
+            return
+        }
+
+        PieChart(
+            modifier = modifier,
+            data = state.getPieChartData(context)
         )
     }
 }

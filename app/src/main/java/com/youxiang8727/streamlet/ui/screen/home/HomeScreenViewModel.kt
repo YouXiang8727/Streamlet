@@ -33,6 +33,12 @@ class HomeScreenViewModel @Inject constructor(
         )
     }
 
+    fun onPieChartDataTypeChanged(pieChartDataType: PieChartDataType) {
+        dispatch(
+            HomeUiEvent.OnPieChartDataTypeChanged(pieChartDataType)
+        )
+    }
+
     init {
         viewModelScope.launch {
             transactionDataByDateFlow.collect { transactionData ->
@@ -55,6 +61,13 @@ class HomeScreenViewModel @Inject constructor(
                     transactionData = event.transactionData
                 )
             }
+            is HomeUiEvent.OnPieChartDataTypeChanged -> {
+                uiStateFlow.value.copy(
+                    _pieChartDataType = event.pieChartDataType
+                )
+            }
+
+            HomeUiEvent.OnCalendarExpandChanged -> TODO()
         }
     }
 }

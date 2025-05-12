@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import java.util.Locale
 
 @Composable
 fun PieChart(
@@ -53,6 +54,7 @@ fun PieChart(
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
         ) {
             items(data) {
+                val percentage = String.format(Locale.getDefault(), "%.2f%%", it.data / sum * 100)
                 Row(
                     modifier = Modifier.fillMaxWidth()
                         .weight(1f),
@@ -65,7 +67,7 @@ fun PieChart(
                     )
 
                     Text(
-                        text = it.label,
+                        text = it.label + percentage,
                         color = it.color,
                         maxLines = 1,
                         modifier = Modifier.weight(1f)
@@ -79,5 +81,5 @@ fun PieChart(
 data class PieChartData(
     val label: String,
     val data: Int,
-    val color: Color
+    val color: Color,
 )

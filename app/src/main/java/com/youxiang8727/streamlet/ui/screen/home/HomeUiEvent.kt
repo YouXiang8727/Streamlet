@@ -8,4 +8,8 @@ sealed interface HomeUiEvent: UiEvent {
     data class OnDateChanged(val date: LocalDate): HomeUiEvent
 
     data class OnTransactionDataChanged(val transactionData: List<TransactionData>): HomeUiEvent
+
+    data object OnCalendarExpandChanged: HomeUiEvent
+
+    data class OnPieChartDataTypeChanged(val pieChartDataType: PieChartDataType): HomeUiEvent
 }

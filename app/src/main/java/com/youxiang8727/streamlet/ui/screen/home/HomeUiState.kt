@@ -30,7 +30,7 @@ data class HomeUiState(
                     PieChartData(
                         label = it.key.title,
                         data = it.value.sumOf { it.amount },
-                        color = it.key.color
+                        color = it.key.color,
                     )
                 }
             }
