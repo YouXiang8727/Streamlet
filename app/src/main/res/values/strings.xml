@@ -26,4 +26,5 @@
     <string name="transaction_saved_failed">Transaction saved failed(%1%s)</string>
 
     <string name="add">Add</string>
+    <string name="balance">Balance</string>
 </resources>

@@ -27,4 +27,5 @@
     <string name="transaction_saved_failed">儲存失敗(%1%s)</string>
 
     <string name="add">新增</string>
+    <string name="balance">收支比</string>
 </resources>
