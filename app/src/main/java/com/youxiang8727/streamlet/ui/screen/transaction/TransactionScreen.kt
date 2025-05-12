@@ -43,9 +43,12 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    initialDate: LocalDate = LocalDate.now()
 ) {
-    val viewModel: TransactionScreenViewModel = hiltViewModel()
+    val viewModel: TransactionScreenViewModel = hiltViewModel<TransactionScreenViewModel, TransactionScreenViewModel.Factory> { factory: TransactionScreenViewModel.Factory ->
+        factory.create(initialDate)
+    }
     val state = viewModel.uiStateFlow.collectAsStateWithLifecycle().value
 
     val context = LocalContext.current
@@ -71,7 +74,7 @@ fun TransactionScreen(
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TransactionType.entries.forEach { transactionType ->
                 TypeChip(
-                    label = context.getString(transactionType.id),
+                    label = context.getString(transactionType.stringResourceId),
                     selected = transactionType == state.transactionType
                 ) {
                     viewModel.onTransactionTypeChanged(transactionType)

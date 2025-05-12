@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import com.youxiang8727.streamlet.data.repository.CategoryEntityRepositoryImpl
 import com.youxiang8727.streamlet.data.repository.TransactionDataEntityRepositoryImpl
-import com.youxiang8727.streamlet.data.source.TransactionDataDao
-import com.youxiang8727.streamlet.data.source.StreamletDatabase
-import com.youxiang8727.streamlet.data.source.CategoryDao
+import com.youxiang8727.streamlet.data.dao.TransactionDataDao
+import com.youxiang8727.streamlet.data.database.StreamletDatabase
+import com.youxiang8727.streamlet.data.dao.CategoryDao
 import com.youxiang8727.streamlet.domain.repository.CategoryEntityRepository
 import com.youxiang8727.streamlet.domain.repository.TransactionDataEntityRepository
 import dagger.Module

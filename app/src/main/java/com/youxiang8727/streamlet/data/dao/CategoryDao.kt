@@ -1,9 +1,9 @@
-package com.youxiang8727.streamlet.data.source
+package com.youxiang8727.streamlet.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.youxiang8727.streamlet.data.model.CategoryEntity
+import com.youxiang8727.streamlet.data.entity.CategoryEntity
 import com.youxiang8727.streamlet.data.model.TransactionType
 
 @Dao

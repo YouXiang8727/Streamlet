@@ -25,4 +25,6 @@
     <string name="category">分類</string>
     <string name="transaction_saved_successfully">儲存成功</string>
     <string name="transaction_saved_failed">儲存失敗(%1%s)</string>
+
+    <string name="add">新增</string>
 </resources>

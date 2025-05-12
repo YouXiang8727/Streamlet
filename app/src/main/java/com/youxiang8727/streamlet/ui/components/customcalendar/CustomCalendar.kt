@@ -45,11 +45,16 @@ import java.util.Locale
 fun CustomCalendar(
     modifier: Modifier = Modifier,
     localDate: LocalDate = LocalDate.now(),
+    expandCallback: (Boolean) -> Unit = {},
     callback: (LocalDate) -> Unit = {}
 ) {
     var year by remember { mutableIntStateOf(localDate.year) }
     var month by remember { mutableStateOf(localDate.month) }
     var expand by remember { mutableStateOf(false) }
+
+    LaunchedEffect(expand) {
+        expandCallback(expand)
+    }
 
     val dates by remember {
         derivedStateOf {
@@ -150,10 +155,21 @@ fun CustomCalendar(
         } else {
             val lazyListState = rememberLazyListState()
 
-            LaunchedEffect(Unit) {
-                val index = dates.first().indexOf(localDate)
+            val visible by remember {
+                derivedStateOf {
+                    val index = dates.first().indexOf(localDate)
 
-                if (index != -1) lazyListState.animateScrollToItem(index)
+                    lazyListState.layoutInfo.visibleItemsInfo.any {
+                        it.index == index
+                    }
+                }
+            }
+
+            LaunchedEffect(visible) {
+                if (visible.not()) {
+                    val index = dates.first().indexOf(localDate)
+                    lazyListState.animateScrollToItem(index)
+                }
             }
             // Compact view
             LazyRow(

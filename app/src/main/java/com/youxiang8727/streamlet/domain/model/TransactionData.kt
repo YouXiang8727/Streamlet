@@ -1,6 +1,6 @@
 package com.youxiang8727.streamlet.domain.model
 
-import com.youxiang8727.streamlet.data.model.TransactionDataEntity
+import com.youxiang8727.streamlet.data.entity.TransactionDataEntity
 import com.youxiang8727.streamlet.data.model.TransactionType
 import java.time.LocalDate
 

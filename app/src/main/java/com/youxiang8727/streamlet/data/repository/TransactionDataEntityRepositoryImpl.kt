@@ -1,7 +1,7 @@
 package com.youxiang8727.streamlet.data.repository
 
-import com.youxiang8727.streamlet.data.model.TransactionDataEntity
-import com.youxiang8727.streamlet.data.source.TransactionDataDao
+import com.youxiang8727.streamlet.data.entity.TransactionDataEntity
+import com.youxiang8727.streamlet.data.dao.TransactionDataDao
 import com.youxiang8727.streamlet.domain.repository.TransactionDataEntityRepository
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate

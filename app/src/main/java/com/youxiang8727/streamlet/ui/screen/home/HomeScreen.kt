@@ -2,6 +2,7 @@ package com.youxiang8727.streamlet.ui.screen.home
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,10 +14,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,27 +37,82 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.youxiang8727.streamlet.domain.model.TransactionData
+import com.youxiang8727.streamlet.ui.components.chart.piechart.PieChart
+import com.youxiang8727.streamlet.ui.components.chart.piechart.PieChartData
 import com.youxiang8727.streamlet.ui.components.customcalendar.CustomCalendar
+import java.time.LocalDate
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    addNewTransaction: (LocalDate) -> Unit = {}
+) {
     val viewModel: HomeScreenViewModel = hiltViewModel()
     val state = viewModel.uiStateFlow.collectAsStateWithLifecycle().value
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
-        CustomCalendar(
-            modifier = modifier,
-            localDate = state.date
-        ) {
-            viewModel.onDateChanged(it)
+    var calendarExpanded by remember { mutableStateOf(false) }
+
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        floatingActionButton = {
+            IconButton(
+                onClick = {
+                    addNewTransaction(state.date)
+                },
+                modifier = Modifier.border(
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    shape = CircleShape
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null
+                )
+            }
         }
+    ) { contentPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+        ) {
+            CustomCalendar(
+                modifier = modifier,
+                localDate = state.date,
+                expandCallback = {
+                    calendarExpanded = it
+                },
+                callback = {
+                    viewModel.onDateChanged(it)
+                }
+            )
 
-        Spacer(modifier = Modifier.weight(1f))
+            if (calendarExpanded) {
+                Spacer(modifier = Modifier.weight(1f))
+            } else {
+                PieChart(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    data = state.transactionData.groupBy {
+                        it.category
+                    }.map {
+                        PieChartData(
+                            label = it.key.title,
+                            data = it.value.sumOf { it.amount },
+                            color = it.key.color
+                        )
+                    }
+                )
+            }
 
-        TransactionDataList(modifier = modifier)
+            TransactionDataList(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1.2f)
+            )
+        }
     }
 }
 
@@ -65,15 +131,13 @@ private fun TransactionDataList(
 
     LazyColumn(
         modifier = modifier
-            .fillMaxWidth()
-            .aspectRatio(1.2f)
             .padding(horizontal = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         data.forEach { (transactionType, transactionDataList) ->
             item {
                 Text(
-                    text = context.getString(transactionType.id)
+                    text = context.getString(transactionType.stringResourceId)
                 )
             }
 
@@ -83,7 +147,7 @@ private fun TransactionDataList(
                     contentAlignment = Alignment.Center
                 ) {
                     TransactionDataListItem(
-                        modifier = modifier,
+                        modifier = Modifier,
                         transactionData = transactionData
                     )
                 }
@@ -98,7 +162,8 @@ private fun TransactionDataListItem(
     transactionData: TransactionData
 ) {
     Row(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .aspectRatio(6f)
             .clip(RoundedCornerShape(8.dp))
             .background(MaterialTheme.colorScheme.surfaceVariant)

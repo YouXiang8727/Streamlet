@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Streamlet</string>
     <string name="app_subtitle">Your Money Diary</string>
-    <string name="transaction_type_expense">Expanse</string>
+    <string name="transaction_type_expense">Expense</string>
     <string name="transaction_type_income">Income</string>
     <string name="category_expense_food">Food</string>
     <string name="category_expense_transport">Transport</string>
@@ -24,4 +24,6 @@
     <string name="category">Category</string>
     <string name="transaction_saved_successfully">Transaction saved successfully</string>
     <string name="transaction_saved_failed">Transaction saved failed(%1%s)</string>
+
+    <string name="add">Add</string>
 </resources>

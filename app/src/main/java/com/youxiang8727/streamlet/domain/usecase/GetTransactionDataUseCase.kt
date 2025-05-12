@@ -1,7 +1,7 @@
 package com.youxiang8727.streamlet.domain.usecase
 
 import android.content.Context
-import com.youxiang8727.streamlet.data.model.toTransactionData
+import com.youxiang8727.streamlet.data.entity.toTransactionData
 import com.youxiang8727.streamlet.domain.model.TransactionData
 import com.youxiang8727.streamlet.domain.repository.TransactionDataEntityRepository
 import dagger.hilt.android.qualifiers.ApplicationContext

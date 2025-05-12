@@ -1,7 +1,9 @@
-package com.youxiang8727.streamlet.data.source
+package com.youxiang8727.streamlet.data.converter
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.room.TypeConverter
-import com.youxiang8727.streamlet.data.model.CategoryEntity
+import com.youxiang8727.streamlet.data.entity.CategoryEntity
 import com.youxiang8727.streamlet.data.model.TransactionType
 import kotlinx.serialization.json.Json
 import java.time.LocalDate
@@ -24,4 +26,10 @@ class Converters {
 
     @TypeConverter
     fun toDate(value: String): LocalDate = LocalDate.parse(value)
+
+    @TypeConverter
+    fun fromColor(color: Color): Int = color.toArgb()
+
+    @TypeConverter
+    fun toColor(value: Int): Color = Color(value)
 }

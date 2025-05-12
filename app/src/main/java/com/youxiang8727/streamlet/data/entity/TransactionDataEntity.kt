@@ -1,9 +1,10 @@
-package com.youxiang8727.streamlet.data.model
+package com.youxiang8727.streamlet.data.entity
 
 import android.content.Context
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.youxiang8727.streamlet.data.model.TransactionType
 import com.youxiang8727.streamlet.domain.model.TransactionData
 import java.time.LocalDate
 

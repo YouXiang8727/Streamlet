@@ -10,19 +10,24 @@ import com.youxiang8727.streamlet.domain.model.TransactionData
 import com.youxiang8727.streamlet.domain.usecase.GetCategoriesUseCase
 import com.youxiang8727.streamlet.domain.usecase.SaveTransactionDataUseCase
 import com.youxiang8727.streamlet.mvi.MviViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import javax.inject.Inject
 
-@HiltViewModel
-class TransactionScreenViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = TransactionScreenViewModel.Factory::class)
+class TransactionScreenViewModel @AssistedInject constructor(
     @ApplicationContext private val context: Context,
     private val getCategoriesUseCase: GetCategoriesUseCase,
-    private val saveTransactionDataUseCase: SaveTransactionDataUseCase
+    private val saveTransactionDataUseCase: SaveTransactionDataUseCase,
+    @Assisted private val initialDate: LocalDate
 ): MviViewModel<TransactionUiState, TransactionUiEvent>(
-    initialState = TransactionUiState()
+    initialState = TransactionUiState(
+        date = initialDate
+    )
 ) {
     fun onTransactionTypeChanged(transactionType: TransactionType) {
         viewModelScope.launch {
@@ -136,5 +141,10 @@ class TransactionScreenViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(initialDate: LocalDate): TransactionScreenViewModel
     }
 }

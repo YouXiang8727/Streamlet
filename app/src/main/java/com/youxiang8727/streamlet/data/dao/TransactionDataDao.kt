@@ -1,9 +1,9 @@
-package com.youxiang8727.streamlet.data.source
+package com.youxiang8727.streamlet.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.youxiang8727.streamlet.data.model.TransactionDataEntity
+import com.youxiang8727.streamlet.data.entity.TransactionDataEntity
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 

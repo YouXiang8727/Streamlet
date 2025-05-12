@@ -1,6 +1,6 @@
 package com.youxiang8727.streamlet.domain.repository
 
-import com.youxiang8727.streamlet.data.model.TransactionDataEntity
+import com.youxiang8727.streamlet.data.entity.TransactionDataEntity
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
