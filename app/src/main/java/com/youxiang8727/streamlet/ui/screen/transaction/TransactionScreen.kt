@@ -18,6 +18,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
@@ -36,6 +38,7 @@ import com.youxiang8727.streamlet.data.model.TransactionType
 import java.time.LocalDate
 import com.youxiang8727.streamlet.R
 import com.youxiang8727.streamlet.domain.model.Category
+import com.youxiang8727.streamlet.ui.navigation.LocalNavigationController
 import com.youxiang8727.streamlet.ui.navigation.LocalSnackBarHostState
 import com.youxiang8727.streamlet.ui.navigation.LocalSnackBarScope
 import kotlinx.coroutines.launch
@@ -55,6 +58,8 @@ fun TransactionScreen(
 
     val localSnackBarScope = LocalSnackBarScope.current
     val localSnackBarHostState = LocalSnackBarHostState.current
+
+    val localNavigationController = LocalNavigationController.current
 
     LaunchedEffect(state.message) {
         state.message?.let {
@@ -151,15 +156,29 @@ fun TransactionScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 儲存按鈕
-        Button(
-            onClick = {
-                viewModel.save()
-            },
-            enabled = state.saveable,
-            modifier = Modifier.fillMaxWidth()
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(context.getString(R.string.save))
+            OutlinedButton(
+                onClick = {
+                    localNavigationController.popBackStack()
+                },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(context.getString(R.string.cancel))
+            }
+
+            Button(
+                onClick = {
+                    viewModel.save()
+                },
+                enabled = state.saveable,
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(context.getString(R.string.save))
+            }
         }
     }
 }
