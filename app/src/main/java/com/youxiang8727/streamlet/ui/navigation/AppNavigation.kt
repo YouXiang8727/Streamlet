@@ -22,7 +22,6 @@ import com.youxiang8727.streamlet.ui.screen.transaction.TransactionScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
-import kotlin.reflect.typeOf
 
 val LocalNavigationController = staticCompositionLocalOf<NavHostController> {
     error("No navigation controller provided")

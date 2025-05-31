@@ -1,8 +1,8 @@
 package com.youxiang8727.streamlet.domain.usecase
 
 import android.content.Context
-import com.youxiang8727.streamlet.data.model.TransactionType
 import com.youxiang8727.streamlet.data.entity.toCategory
+import com.youxiang8727.streamlet.data.model.TransactionType
 import com.youxiang8727.streamlet.domain.model.Category
 import com.youxiang8727.streamlet.domain.repository.CategoryEntityRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
