@@ -2,6 +2,7 @@ package com.youxiang8727.streamlet.ui.screen.transaction
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.youxiang8727.streamlet.R
 import com.youxiang8727.streamlet.data.model.TransactionType
@@ -59,6 +60,10 @@ class TransactionScreenViewModel @AssistedInject constructor(
     fun onNoteChanged(note: String) {
         if (note.length > uiStateFlow.value.maxNoteLength) return
         dispatch(TransactionUiEvent.OnNoteChanged(note))
+    }
+
+    fun onImagesPicked(images: List<Uri>) {
+        dispatch(TransactionUiEvent.OnImagesPicked(images))
     }
 
     @SuppressLint("StringFormatMatches")
@@ -132,6 +137,13 @@ class TransactionScreenViewModel @AssistedInject constructor(
                     note = event.note
                 )
             }
+
+            is TransactionUiEvent.OnImagesPicked -> {
+                uiStateFlow.value.copy(
+                    images = event.images
+                )
+            }
+
             is TransactionUiEvent.OnSaveResult -> {
                 uiStateFlow.value.copy(
                     title = "",

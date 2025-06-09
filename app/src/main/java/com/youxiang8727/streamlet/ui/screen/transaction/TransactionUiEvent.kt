@@ -1,5 +1,6 @@
 package com.youxiang8727.streamlet.ui.screen.transaction
 
+import android.net.Uri
 import com.youxiang8727.streamlet.data.model.TransactionType
 import com.youxiang8727.streamlet.domain.model.Category
 import com.youxiang8727.streamlet.mvi.UiEvent
@@ -17,6 +18,8 @@ sealed interface TransactionUiEvent: UiEvent {
     data class OnAmountChanged(val amount: Int): TransactionUiEvent
 
     data class OnNoteChanged(val note: String): TransactionUiEvent
+
+    data class OnImagesPicked(val images: List<Uri>) : TransactionUiEvent
 
     data class OnSaveResult(val message: String): TransactionUiEvent
 }

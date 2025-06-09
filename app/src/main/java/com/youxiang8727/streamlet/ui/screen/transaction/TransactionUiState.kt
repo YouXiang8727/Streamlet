@@ -1,5 +1,6 @@
 package com.youxiang8727.streamlet.ui.screen.transaction
 
+import android.net.Uri
 import com.youxiang8727.streamlet.data.model.TransactionType
 import com.youxiang8727.streamlet.domain.model.Category
 import com.youxiang8727.streamlet.mvi.UiState
@@ -13,7 +14,8 @@ data class TransactionUiState(
     val note: String = "",
     val categories: List<Category> = emptyList(),
     val categoryEntity: Category? = null,
-    val message: String? = null
+    val message: String? = null,
+    val images: List<Uri> = emptyList()
 ): UiState {
     val maxTitleLength = 10
     val titleSupportText = "${title.length}/$maxTitleLength"

@@ -71,4 +71,6 @@ dependencies {
     ksp("com.google.dagger:hilt-android-compiler:2.56.1")
 
     implementation("androidx.navigation:navigation-compose:2.9.0-alpha02")
+
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
 }
