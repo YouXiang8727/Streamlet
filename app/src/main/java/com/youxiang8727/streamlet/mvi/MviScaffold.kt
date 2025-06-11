@@ -1,5 +1,6 @@
 package com.youxiang8727.streamlet.mvi
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -39,8 +40,11 @@ abstract class MviViewModel<S: UiState, E: UiEvent>(
         viewModelScope.launch {
             event.collect {
 //                state = reduce(it)
+                Log.d(this@MviViewModel.javaClass.simpleName, "${this@MviViewModel} event.collect($it)")
                 _uiStateFlow.value = reduce(it)
             }
         }
+
+        Log.d(this@MviViewModel.javaClass.simpleName, "${this@MviViewModel} initialState($initialState)")
     }
 }

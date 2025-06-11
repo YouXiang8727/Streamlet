@@ -7,6 +7,7 @@ import com.youxiang8727.streamlet.mvi.UiState
 import java.time.LocalDate
 
 data class TransactionUiState(
+    val id: Int? = null,
     val transactionType: TransactionType = TransactionType.EXPENSE,
     val date: LocalDate = LocalDate.now(),
     val title: String = "",

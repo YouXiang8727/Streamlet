@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.provider.MediaStore.Images
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -25,7 +26,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,12 +46,10 @@ import com.youxiang8727.streamlet.ui.navigation.LocalSnackBarHostState
 import com.youxiang8727.streamlet.ui.navigation.LocalSnackBarScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun ImagePicker(
     maxSize: Int = 5,
     currentImages: List<Uri> = emptyList(),
-
     dismiss: () -> Unit = {},
     callback: (List<Uri>) -> Unit
 ) {
@@ -82,8 +80,8 @@ fun ImagePicker(
             val idColumn = cursor.getColumnIndexOrThrow(Images.Media._ID)
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
-                val contentUri = ContentUris.withAppendedId(contentUri, id)
-                imageUris.add(contentUri)
+                val uri = ContentUris.withAppendedId(contentUri, id)
+                imageUris.add(uri)
             }
         }
     }
@@ -96,7 +94,10 @@ fun ImagePicker(
         } else {
             permissionLauncher.launch(READ_EXTERNAL_STORAGE)
         }
+    }
 
+    LaunchedEffect(currentImages) {
+        pickedImages.clear()
         pickedImages.addAll(currentImages)
     }
 

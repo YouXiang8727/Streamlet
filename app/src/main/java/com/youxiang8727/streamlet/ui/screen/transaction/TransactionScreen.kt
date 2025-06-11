@@ -1,6 +1,7 @@
 package com.youxiang8727.streamlet.ui.screen.transaction
 
 import android.app.DatePickerDialog
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -50,6 +51,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.youxiang8727.streamlet.R
 import com.youxiang8727.streamlet.data.model.TransactionType
 import com.youxiang8727.streamlet.domain.model.Category
+import com.youxiang8727.streamlet.domain.model.TransactionData
 import com.youxiang8727.streamlet.ui.components.imagepicker.ImagePicker
 import com.youxiang8727.streamlet.ui.navigation.LocalNavigationController
 import com.youxiang8727.streamlet.ui.navigation.LocalSnackBarHostState
@@ -61,10 +63,10 @@ import java.time.LocalDate
 @Composable
 fun TransactionScreen(
     modifier: Modifier = Modifier,
-    initialDate: LocalDate = LocalDate.now()
+    transactionData: TransactionData? = null
 ) {
     val viewModel: TransactionScreenViewModel = hiltViewModel<TransactionScreenViewModel, TransactionScreenViewModel.Factory> { factory: TransactionScreenViewModel.Factory ->
-        factory.create(initialDate)
+        factory.create(transactionData)
     }
     val state = viewModel.uiStateFlow.collectAsStateWithLifecycle().value
 
@@ -96,6 +98,7 @@ fun TransactionScreen(
         sheetContent = {
             ImagePicker(
                 maxSize = 5,
+                currentImages = state.images.toList(),
                 dismiss = {
                     bottomSheetScope.launch {
                         bottomSheetState.hide()
@@ -302,3 +305,4 @@ fun CategoryDropdown(
         }
     }
 }
+

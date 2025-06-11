@@ -32,4 +32,10 @@ class Converters {
 
     @TypeConverter
     fun toColor(value: Int): Color = Color(value)
+
+    @TypeConverter
+    fun fromStringList(list: List<String>): String = Json.encodeToString(list)
+
+    @TypeConverter
+    fun toStringList(value: String): List<String> = Json.decodeFromString(value)
 }

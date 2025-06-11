@@ -12,7 +12,7 @@ import java.time.LocalDate
 data class TransactionDataEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Int = 0,
+    val id: Int? = null,
     @ColumnInfo(name = "date")
     val date: LocalDate,
     @ColumnInfo(name = "transaction_type")
@@ -25,13 +25,17 @@ data class TransactionDataEntity(
     val categoryEntity: CategoryEntity,
     @ColumnInfo(name = "note")
     val note: String = "",
+    @ColumnInfo(name = "images")
+    val images: List<String> = emptyList()
 )
 
 fun TransactionDataEntity.toTransactionData(context: Context): TransactionData = TransactionData(
+    id = id,
     date = date,
     transactionType = transactionType,
     amount = amount,
     title = title,
     category = categoryEntity.toCategory(context),
-    note = note
+    note = note,
+    images = images
 )

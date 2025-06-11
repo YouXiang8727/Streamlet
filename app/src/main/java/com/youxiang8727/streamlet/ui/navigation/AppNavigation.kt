@@ -16,12 +16,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.youxiang8727.streamlet.domain.model.TransactionData
 import com.youxiang8727.streamlet.ui.screen.home.HomeScreen
 import com.youxiang8727.streamlet.ui.screen.splash.SplashScreen
 import com.youxiang8727.streamlet.ui.screen.transaction.TransactionScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable
-import java.time.LocalDate
+import kotlinx.serialization.json.Json
 
 val LocalNavigationController = staticCompositionLocalOf<NavHostController> {
     error("No navigation controller provided")
@@ -72,8 +73,13 @@ fun AppNavigation(
 
             composable<HomeScreenDestination> {
                 HomeScreen(modifier) {
+                    val transactionDataJsonString = if (it == null) {
+                        null
+                    } else {
+                        Json.encodeToString(it)
+                    }
                     navHostController.navigate(
-                        TransactionScreenDestination(it.toEpochDay())
+                        TransactionScreenDestination(transactionDataJsonString)
                     )
                 }
             }
@@ -105,7 +111,12 @@ fun AppNavigation(
                 },
             ) {
                 val destination: TransactionScreenDestination = it.toRoute()
-                TransactionScreen(modifier, LocalDate.ofEpochDay(destination.initialDateEpoch))
+                val transactionData = if (destination.transactionDataJsonString == null) {
+                    null
+                } else {
+                    Json.decodeFromString<TransactionData>(destination.transactionDataJsonString)
+                }
+                TransactionScreen(modifier, transactionData)
             }
         }
     }
@@ -116,7 +127,7 @@ data object SplashScreenDestination
 
 @Serializable
 data class TransactionScreenDestination(
-    val initialDateEpoch: Long
+    val transactionDataJsonString: String? = null
 )
 
 @Serializable

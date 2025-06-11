@@ -3,12 +3,15 @@ package com.youxiang8727.streamlet.ui.screen.transaction
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.youxiang8727.streamlet.R
 import com.youxiang8727.streamlet.data.model.TransactionType
 import com.youxiang8727.streamlet.domain.model.Category
 import com.youxiang8727.streamlet.domain.model.TransactionData
+import com.youxiang8727.streamlet.domain.model.toTransactionUiState
 import com.youxiang8727.streamlet.domain.usecase.GetCategoriesUseCase
+import com.youxiang8727.streamlet.domain.usecase.SaveImageUseCase
 import com.youxiang8727.streamlet.domain.usecase.SaveTransactionDataUseCase
 import com.youxiang8727.streamlet.mvi.MviViewModel
 import dagger.assisted.Assisted
@@ -24,11 +27,10 @@ class TransactionScreenViewModel @AssistedInject constructor(
     @ApplicationContext private val context: Context,
     private val getCategoriesUseCase: GetCategoriesUseCase,
     private val saveTransactionDataUseCase: SaveTransactionDataUseCase,
-    @Assisted private val initialDate: LocalDate
+    private val saveImageUseCase: SaveImageUseCase,
+    @Assisted private val transactionData: TransactionData?
 ): MviViewModel<TransactionUiState, TransactionUiEvent>(
-    initialState = TransactionUiState(
-        date = initialDate
-    )
+    initialState = transactionData?.toTransactionUiState() ?: TransactionUiState()
 ) {
     fun onTransactionTypeChanged(transactionType: TransactionType) {
         viewModelScope.launch {
@@ -69,13 +71,19 @@ class TransactionScreenViewModel @AssistedInject constructor(
     @SuppressLint("StringFormatMatches")
     fun save() {
         viewModelScope.launch {
+            val images = uiStateFlow.value.images.map {
+                saveImageUseCase(it)
+            }
+
             val transactionData = TransactionData(
+                id = uiStateFlow.value.id,
                 transactionType = uiStateFlow.value.transactionType,
                 category = uiStateFlow.value.categoryEntity!!,
                 date = uiStateFlow.value.date,
                 title = uiStateFlow.value.title,
                 amount = uiStateFlow.value.amount,
-                note = uiStateFlow.value.note
+                note = uiStateFlow.value.note,
+                images = images
             )
 
             try {
@@ -146,10 +154,12 @@ class TransactionScreenViewModel @AssistedInject constructor(
 
             is TransactionUiEvent.OnSaveResult -> {
                 uiStateFlow.value.copy(
+                    id = null,
                     title = "",
                     amount = 0,
                     note = "",
-                    message = event.message
+                    message = event.message,
+                    images = emptyList()
                 )
             }
         }
@@ -157,6 +167,6 @@ class TransactionScreenViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(initialDate: LocalDate): TransactionScreenViewModel
+        fun create(transactionData: TransactionData?): TransactionScreenViewModel
     }
 }

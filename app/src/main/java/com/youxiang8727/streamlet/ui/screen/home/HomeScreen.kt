@@ -2,6 +2,7 @@ package com.youxiang8727.streamlet.ui.screen.home
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,12 +40,11 @@ import com.youxiang8727.streamlet.domain.model.TransactionData
 import com.youxiang8727.streamlet.ui.components.calendar.CustomCalendar
 import com.youxiang8727.streamlet.ui.components.chart.piechart.PieChart
 import com.youxiang8727.streamlet.ui.screen.transaction.TypeChip
-import java.time.LocalDate
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    addNewTransaction: (LocalDate) -> Unit = {}
+    toTransactionDataAction: (TransactionData?) -> Unit = {}
 ) {
     val viewModel: HomeScreenViewModel = hiltViewModel()
     val state = viewModel.uiStateFlow.collectAsStateWithLifecycle().value
@@ -56,7 +56,7 @@ fun HomeScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    addNewTransaction(state.date)
+                    toTransactionDataAction(null)
                 },
             ) {
                 Icon(
@@ -95,7 +95,10 @@ fun HomeScreen(
             TransactionDataList(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(1.2f)
+                    .aspectRatio(1.2f),
+                toTransactionDataAction = {
+                    toTransactionDataAction(it)
+                }
             )
         }
     }
@@ -103,7 +106,8 @@ fun HomeScreen(
 
 @Composable
 private fun TransactionDataList(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    toTransactionDataAction: (TransactionData) -> Unit = {}
 ) {
     val viewModel: HomeScreenViewModel = hiltViewModel()
     val state = viewModel.uiStateFlow.collectAsStateWithLifecycle().value
@@ -128,7 +132,10 @@ private fun TransactionDataList(
 
             items(transactionDataList) { transactionData ->
                 Box(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
+                        .clickable {
+                            toTransactionDataAction(transactionData)
+                        },
                     contentAlignment = Alignment.Center
                 ) {
                     TransactionDataListItem(

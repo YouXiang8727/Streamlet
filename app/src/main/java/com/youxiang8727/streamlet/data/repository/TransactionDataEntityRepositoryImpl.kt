@@ -1,5 +1,6 @@
 package com.youxiang8727.streamlet.data.repository
 
+import android.util.Log
 import com.youxiang8727.streamlet.data.dao.TransactionDataDao
 import com.youxiang8727.streamlet.data.entity.TransactionDataEntity
 import com.youxiang8727.streamlet.domain.repository.TransactionDataEntityRepository
@@ -10,7 +11,7 @@ data class TransactionDataEntityRepositoryImpl(
     private val transactionDataDao: TransactionDataDao
 ): TransactionDataEntityRepository {
     override suspend fun insert(transactionDataEntity: TransactionDataEntity) {
-        transactionDataDao.insert(transactionDataEntity)
+        transactionDataDao.upsert(transactionDataEntity)
     }
 
     override fun getTransactionByDate(localDate: LocalDate): Flow<List<TransactionDataEntity>> {
