@@ -31,4 +31,5 @@
     <string name="no_data">沒有資料</string>
     <string name="cancel">取消</string>
     <string name="maximum_of_images_be_selected">最多只能選取 %d 張圖片</string>
+    <string name="lost_images">遺失 %d 張照片</string>
 </resources>

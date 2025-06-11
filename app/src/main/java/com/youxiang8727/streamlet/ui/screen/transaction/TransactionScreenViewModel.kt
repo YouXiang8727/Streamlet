@@ -30,7 +30,7 @@ class TransactionScreenViewModel @AssistedInject constructor(
     private val saveImageUseCase: SaveImageUseCase,
     @Assisted private val transactionData: TransactionData?
 ): MviViewModel<TransactionUiState, TransactionUiEvent>(
-    initialState = transactionData?.toTransactionUiState() ?: TransactionUiState()
+    initialState = transactionData?.toTransactionUiState(context) ?: TransactionUiState()
 ) {
     fun onTransactionTypeChanged(transactionType: TransactionType) {
         viewModelScope.launch {
