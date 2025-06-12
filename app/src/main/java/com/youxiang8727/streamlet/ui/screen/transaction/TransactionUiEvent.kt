@@ -21,5 +21,7 @@ sealed interface TransactionUiEvent: UiEvent {
 
     data class OnImagesPicked(val images: List<Uri>) : TransactionUiEvent
 
+    data class OnDeleteImage(val image: Uri) : TransactionUiEvent
+
     data class OnSaveResult(val message: String): TransactionUiEvent
 }

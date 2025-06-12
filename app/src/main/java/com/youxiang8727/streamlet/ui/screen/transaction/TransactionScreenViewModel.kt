@@ -3,7 +3,6 @@ package com.youxiang8727.streamlet.ui.screen.transaction
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.youxiang8727.streamlet.R
 import com.youxiang8727.streamlet.data.model.TransactionType
@@ -66,6 +65,10 @@ class TransactionScreenViewModel @AssistedInject constructor(
 
     fun onImagesPicked(images: List<Uri>) {
         dispatch(TransactionUiEvent.OnImagesPicked(images))
+    }
+
+    fun deleteImage(uri: Uri) {
+        dispatch(TransactionUiEvent.OnDeleteImage(uri))
     }
 
     @SuppressLint("StringFormatMatches")
@@ -149,6 +152,14 @@ class TransactionScreenViewModel @AssistedInject constructor(
             is TransactionUiEvent.OnImagesPicked -> {
                 uiStateFlow.value.copy(
                     images = event.images
+                )
+            }
+
+            is TransactionUiEvent.OnDeleteImage -> {
+                val currentImages = uiStateFlow.value.images.toMutableList()
+                currentImages.remove(event.image)
+                uiStateFlow.value.copy(
+                    images = currentImages
                 )
             }
 

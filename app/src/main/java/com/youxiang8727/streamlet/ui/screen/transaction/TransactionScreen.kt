@@ -1,8 +1,10 @@
 package com.youxiang8727.streamlet.ui.screen.transaction
 
 import android.app.DatePickerDialog
-import android.util.Log
+import android.net.Uri
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -10,9 +12,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
@@ -39,6 +45,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -59,7 +66,7 @@ import com.youxiang8727.streamlet.ui.navigation.LocalSnackBarScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionScreen(
     modifier: Modifier = Modifier,
@@ -221,15 +228,9 @@ fun TransactionScreen(
                     .aspectRatio(3f)
             ) {
                 items(state.images) { uri ->
-                    GlideImage(
-                        model = uri,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .aspectRatio(1f)
-                            .padding(8.dp),
-                        contentScale = ContentScale.Crop
-                    )
+                    ImageListItem(uri) {
+                        viewModel.deleteImage(it)
+                    }
                 }
             }
 
@@ -302,6 +303,49 @@ fun CategoryDropdown(
                     }
                 )
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun ImageListItem(
+    uri: Uri,
+    onDelete: (Uri) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxHeight()
+            .aspectRatio(1f),
+        contentAlignment = Alignment.TopEnd
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        ) {
+            GlideImage(
+                model = uri,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        }
+
+        IconButton(
+            onClick = {
+                onDelete(uri)
+            },
+            modifier = Modifier
+                .size(16.dp)
+                .clip(CircleShape)
+                .padding(0.dp)
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Clear,
+                contentDescription = null
+            )
         }
     }
 }
